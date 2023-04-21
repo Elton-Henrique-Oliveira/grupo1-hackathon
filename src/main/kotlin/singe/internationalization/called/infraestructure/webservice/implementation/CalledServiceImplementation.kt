@@ -9,7 +9,10 @@ import java.util.*
 
 
 @RestController
-@CrossOrigin(origins = ["http://10.0.11.143:3000"], allowCredentials = "true")
+@CrossOrigin(
+    origins = ["http://10.0.11.143:3000", "http://10.0.11.77:3000", "http://10.0.11.139:3000"],
+    allowCredentials = "true"
+)
 @RequestMapping("/called")
 class CalledServiceImplementation(
     val usecase: CalledUseCase,
@@ -17,8 +20,7 @@ class CalledServiceImplementation(
 
     @PostMapping
     override fun createAndUpdate(@RequestBody called: Called): CalledResponse? {
-        println("porra")
-
+        println("elton")
         return usecase.createAndUpdate(called)
     }
 

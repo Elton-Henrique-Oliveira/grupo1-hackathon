@@ -15,29 +15,17 @@ class CalledUseCaseImplementation(
     override fun createAndUpdate(called: Called): CalledResponse {
         return try {
             println(called.uuid)
-            println(called.identifier)
-            println(called.uuid)
-            println(called.uuid)
-
             if (called.uuid == null) {
-                if (called.identifier.isNullOrBlank()) {
-                    return CalledResponse(error = IDENTIFIER_NOT_INFORMED)
-                }
-                if(repository.getCalledByIdentifier(called.identifier!!) != null){
-                    return CalledResponse(error = IDENTIFIER_ALREADY_REGISTERED)
-                }
+//                if(repository.getCalledByIdentifier(called.identifier!!) != null){
+//                    return CalledResponse(error = IDENTIFIER_ALREADY_REGISTERED)
+//                }
                 return CalledResponse(called = repository.createCalled(called))
-            }
-            println("veio aqui porra")
-            if (called.identifier.isNullOrBlank()) {
-                return CalledResponse(error = IDENTIFIER_NOT_INFORMED)
             }
             if(repository.getCalledByUUID(called.uuid!!) == null){
                 return CalledResponse(error = CALL_DOES_NOT_EXIST)
             }
             CalledResponse(called = repository.updateCalled(called))
         } catch (e: Exception) {
-            println(e)
             CalledResponse(error = CALLED_CREATE_ERROR)
         }
     }

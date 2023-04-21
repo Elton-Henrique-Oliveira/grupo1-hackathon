@@ -7,9 +7,9 @@ import singe.internationalization.called.domain.entities.DescriptionCalled
 
 object CalledDataBase : Table("called") {
     val uuid = uuid("uuid").uniqueIndex()
-    val identifier = varchar("identifier", 100)
+    val identifier = long("identifier").autoIncrement()
     val userName = varchar("name", 200)
-    val type = integer("type")
+    val flowUUID = reference("flow_uuid", FlowDataBase.uuid)
     val situation = integer("situation")
     val branch = long("branch").nullable()
     val telephone = long("telephone").nullable()

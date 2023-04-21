@@ -6,9 +6,9 @@ import java.util.*
 
 class Called(
     var uuid: UUID?,
-    var identifier: String? = null,
+    var identifier: Long? = null,
     var userName: String? = null,
-    var type: Int? = null,
+    var flow: Flow? = null,
     var situation: Int? = null,
     var branch: Long? = null,
     var telephone: Long? = null,

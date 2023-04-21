@@ -10,7 +10,7 @@ object DescriptionCalledDataBase : Table("description_called") {
     val calledUUID = reference("called_uuid", CalledDataBase.uuid)
     val title = varchar("title", 250)
     val priority = varchar("priority", 200)
-    val typeSystemUUID = reference("type_system_uuid", TypeSystemDataBase.uuid)
+    val typeSystemUUID = reference("type_system_uuid", FlowTypeDataBase.uuid)
     val situation = integer("situation")
     val modifiedAt = datetime("modified_at").defaultExpression(CurrentDateTime)
     val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)

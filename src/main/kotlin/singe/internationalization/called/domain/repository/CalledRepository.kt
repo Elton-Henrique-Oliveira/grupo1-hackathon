@@ -15,5 +15,5 @@ interface CalledRepository{
 
     fun getCalledByUUID(calledUUID: UUID): Called?
 
-    fun getCalledByIdentifier(calledIdentifier: String): Called?
+    fun getCalledByIdentifier(calledIdentifier: Long): Called?
 }

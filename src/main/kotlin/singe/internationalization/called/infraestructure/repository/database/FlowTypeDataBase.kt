@@ -5,10 +5,10 @@ import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 
 
-object TypeSystemDataBase : Table("type_system") {
+object FlowTypeDataBase : Table("flow_type") {
     val uuid = uuid("uuid")
     val label = varchar("label", 60)
-    val calledType = integer("called_type")
+    val flowUUID = reference("flow_uuid", FlowDataBase.uuid)
     val statusCode = integer("status_code").default(0)
     val modifiedAt = datetime("modified_at").defaultExpression(CurrentDateTime)
     val createAt = datetime("created_at").defaultExpression(CurrentDateTime)
