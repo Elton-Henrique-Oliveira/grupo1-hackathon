@@ -1,11 +1,11 @@
-package br.com.lince.singe
+package singe
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(
     scanBasePackages = [
-        "br.com.lince.singe",
+        "singe",
         "org.jetbrains.exposed.spring",
     ],
 )
