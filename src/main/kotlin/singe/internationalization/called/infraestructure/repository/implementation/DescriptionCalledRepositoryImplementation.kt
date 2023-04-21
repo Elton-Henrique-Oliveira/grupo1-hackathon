@@ -1,0 +1,4 @@
+package singe.internationalization.called.infraestructure.repository.implementation
+
+class DescriptionCalledRepositoryImplementation {
+}
