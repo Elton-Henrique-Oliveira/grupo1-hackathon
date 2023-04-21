@@ -10,12 +10,11 @@ object CalledDataBase : Table("called") {
     val identifier = long("identifier").autoIncrement()
     val userName = varchar("name", 200)
     val flowUUID = reference("flow_uuid", FlowDataBase.uuid)
-    val situation = integer("situation")
+    val situationUUID = reference("situation_uuid", SituationCalledDataBase.uuid)
     val branch = long("branch").nullable()
     val telephone = long("telephone").nullable()
     val modifiedAt = datetime("modified_at").defaultExpression(CurrentDateTime)
     val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)
-
     init {
         PrimaryKey(uuid)
     }

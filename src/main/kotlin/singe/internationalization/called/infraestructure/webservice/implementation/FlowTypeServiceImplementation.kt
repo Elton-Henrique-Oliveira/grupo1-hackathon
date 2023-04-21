@@ -1,12 +1,10 @@
 package singe.internationalization.called.infraestructure.webservice.implementation
 
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import singe.internationalization.called.domain.entities.FlowType
 import singe.internationalization.called.domain.usecases.FlowTypeUseCase
 import singe.internationalization.called.infraestructure.webservice.FlowTypeService
+import java.util.*
 
 @RestController
 @CrossOrigin(
@@ -22,6 +20,13 @@ class FlowTypeServiceImplementation(
     @GetMapping("")
     override fun getFlowType(): List<FlowType>? {
         return flowTypeUserCase.getFlowType();
+    }
+
+    @GetMapping("/{flowUUID}")
+    override fun getFlowTypeByFlowUUID(
+        @PathVariable("flowUUID")  flowUUID: UUID,
+    ): List<FlowType>? {
+        return flowTypeUserCase.getFlowTypeByFlowUUID(flowUUID);
     }
 
 }

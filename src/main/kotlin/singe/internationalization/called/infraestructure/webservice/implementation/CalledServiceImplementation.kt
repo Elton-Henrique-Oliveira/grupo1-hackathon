@@ -32,7 +32,7 @@ class CalledServiceImplementation(
     @PostMapping("/{calledUUID}/{situationUUID}")
     override fun updateCalledSituation(
         @PathVariable("calledUUID") calledUUID: UUID,
-        @PathVariable("situationUUID") situationUUID: Int
+        @PathVariable("situationUUID") situationUUID: UUID
     ): Boolean {
         return usecase.updateCalledSituation(calledUUID, situationUUID)!!
     }

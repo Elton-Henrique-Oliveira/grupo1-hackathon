@@ -8,6 +8,7 @@ import singe.internationalization.called.domain.entities.Called
 import singe.internationalization.called.domain.repository.CalledRepository
 import singe.internationalization.called.domain.repository.DescriptionCalledRepository
 import singe.internationalization.called.domain.repository.FlowRepository
+import singe.internationalization.called.domain.repository.SituationCalledRepository
 import singe.internationalization.called.infraestructure.repository.database.CalledDataBase
 import java.time.LocalDateTime
 import java.util.*
@@ -16,6 +17,7 @@ import java.util.*
 class CalledRepositoryImplementation(
     var descriptionCalledRepository: DescriptionCalledRepository,
     var flowRepository: FlowRepository,
+    var situationCalledRepository: SituationCalledRepository,
 ) : CalledRepository {
 
     override fun createCalled(called: Called): Called {
@@ -32,7 +34,7 @@ class CalledRepositoryImplementation(
                 it[uuid] = called.uuid!!
                 it[userName] = called.userName!!
                 it[flowUUID] = called.flow!!.uuid!!
-                it[situation] = called.situation!!
+                it[situationUUID] = called.situation!!.uuid!!
                 it[branch] = called.branch!!
                 it[telephone] = called.telephone!!
             }.resultedValues
@@ -56,7 +58,7 @@ class CalledRepositoryImplementation(
                     it[uuid] = called.uuid!!
                     it[userName] = called.userName!!
                     it[flowUUID] = called.flow!!.uuid!!
-                    it[situation] = called.situation!!
+                    it[situationUUID] = called.situation!!.uuid!!
                     it[branch] = called.branch!!
                     it[telephone] = called.telephone!!
                     it[modifiedAt] = called.modifiedAt!!
@@ -79,7 +81,7 @@ class CalledRepositoryImplementation(
                     identifier = it[CalledDataBase.identifier],
                     userName = it[CalledDataBase.userName],
                     flow = flowRepository.getFlowByUUID(it[CalledDataBase.flowUUID]),
-                    situation = it[CalledDataBase.situation],
+                    situation = situationCalledRepository.getSituationCalledByUUID(it[CalledDataBase.situationUUID]),
                     branch = it[CalledDataBase.branch],
                     telephone = it[CalledDataBase.telephone],
                     createdAt = it[CalledDataBase.createdAt],
@@ -91,17 +93,11 @@ class CalledRepositoryImplementation(
         return listCalled.toList()
     }
 
-    override fun updateCalledSituation(calledUUID: UUID, situationUUID: Int): Boolean? {
+    override fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Boolean? {
         return transaction {
             transaction {
-                addLogger(StdOutSqlLogger)
-                CalledDataBase.update({
-                    CalledDataBase.uuid eq calledUUID
-                }) {
-                    it[situation] = situationUUID
-                }
             }
-            true
+            false
         }
     }
 
@@ -116,7 +112,7 @@ class CalledRepositoryImplementation(
                     identifier = it[CalledDataBase.identifier],
                     userName = it[CalledDataBase.userName],
                     flow = flowRepository.getFlowByUUID(it[CalledDataBase.flowUUID]),
-                    situation = it[CalledDataBase.situation],
+                    situation = situationCalledRepository.getSituationCalledByUUID(it[CalledDataBase.situationUUID]),
                     branch = it[CalledDataBase.branch],
                     telephone = it[CalledDataBase.telephone],
                     createdAt = it[CalledDataBase.createdAt],
@@ -140,7 +136,7 @@ class CalledRepositoryImplementation(
                     identifier = it[CalledDataBase.identifier],
                     userName = it[CalledDataBase.userName],
                     flow = flowRepository.getFlowByUUID(it[CalledDataBase.flowUUID]),
-                    situation = it[CalledDataBase.situation],
+                    situation = situationCalledRepository.getSituationCalledByUUID(it[CalledDataBase.situationUUID]),
                     branch = it[CalledDataBase.branch],
                     descriptionCalled = descriptionCalledRepository.getDescriptionCalledByDCalledUUID(it[CalledDataBase.uuid])!!,
                     telephone = it[CalledDataBase.telephone],
@@ -157,12 +153,13 @@ class CalledRepositoryImplementation(
 
 private fun ResultRow.toCalled(
     flowRepository: FlowRepository,
+    situationCalledRepository: SituationCalledRepository,
 ): Called {
     return Called(
         uuid = this[CalledDataBase.uuid],
         userName = this[CalledDataBase.userName],
         flow = flowRepository.getFlowByUUID(this[CalledDataBase.flowUUID]),
-        situation = this[CalledDataBase.situation],
+        situation = situationCalledRepository.getSituationCalledByUUID(this[CalledDataBase.situationUUID]),
         branch = this[CalledDataBase.branch],
         telephone = this[CalledDataBase.telephone],
         createdAt = this[CalledDataBase.createdAt],

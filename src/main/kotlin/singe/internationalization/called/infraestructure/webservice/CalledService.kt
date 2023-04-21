@@ -13,7 +13,7 @@ interface CalledService {
     fun getCalled(): List<Called>?
     fun updateCalledSituation(
         @PathVariable("calledUUID") calledUUID: UUID,
-        @PathVariable("situationUUID") situationUUID: Int
+        @PathVariable("situationUUID") situationUUID: UUID
     ): Boolean?
 
     fun getCalledByUUID(

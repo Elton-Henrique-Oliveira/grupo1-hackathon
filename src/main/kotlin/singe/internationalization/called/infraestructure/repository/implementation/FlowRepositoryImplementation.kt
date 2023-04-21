@@ -7,11 +7,14 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
 import singe.internationalization.called.domain.entities.Flow
 import singe.internationalization.called.domain.repository.FlowRepository
+import singe.internationalization.called.domain.repository.FlowTypeRepository
 import singe.internationalization.called.infraestructure.repository.database.FlowDataBase
 import java.util.*
 
 @Repository
-class FlowRepositoryImplementation : FlowRepository {
+class FlowRepositoryImplementation(
+    var flowTypeRepository: FlowTypeRepository,
+) : FlowRepository {
 
     override fun getFlow(): List<Flow> {
 
@@ -23,6 +26,7 @@ class FlowRepositoryImplementation : FlowRepository {
                     uuid = it[FlowDataBase.uuid],
                     label = it[FlowDataBase.label],
                     statusCode = it[FlowDataBase.statusCode],
+                    flowType = flowTypeRepository.getFlowTypeByFlowUUID(it[FlowDataBase.uuid]),
                     isInfrastructure = it[FlowDataBase.isInfrastructure],
                     createdAt = it[FlowDataBase.createdAt],
                     modifiedAt = it[FlowDataBase.modifiedAt],
@@ -41,6 +45,7 @@ class FlowRepositoryImplementation : FlowRepository {
                     uuid = it[FlowDataBase.uuid],
                     label = it[FlowDataBase.label],
                     statusCode = it[FlowDataBase.statusCode],
+                    //flowType = flowTypeRepository.getFlowTypeByFlowUUID(it[FlowDataBase.uuid]),
                     isInfrastructure = it[FlowDataBase.isInfrastructure],
                     createdAt = it[FlowDataBase.createdAt],
                     modifiedAt = it[FlowDataBase.modifiedAt],

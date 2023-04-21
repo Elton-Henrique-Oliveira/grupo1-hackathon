@@ -9,7 +9,7 @@ class Called(
     var identifier: Long? = null,
     var userName: String? = null,
     var flow: Flow? = null,
-    var situation: Int? = null,
+    var situation: SituationCalled? = null,
     var branch: Long? = null,
     var telephone: Long? = null,
     var descriptionCalled: List<DescriptionCalled>? = null,

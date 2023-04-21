@@ -7,7 +7,7 @@ import singe.internationalization.called.infraestructure.webservice.SituationCal
 
 
 @RestController
-@RequestMapping("/situationCalledUseCase")
+@RequestMapping("/situationCalled")
 class SituationCalledServiceImplementation(
         val situationCalledUserCase: SituationCalledUseCase,
 ) : SituationCalledService {

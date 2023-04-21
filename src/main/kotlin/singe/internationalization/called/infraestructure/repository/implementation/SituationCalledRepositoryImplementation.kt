@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository
 import singe.internationalization.called.domain.entities.SituationCalled
 import singe.internationalization.called.domain.repository.SituationCalledRepository
 import singe.internationalization.called.infraestructure.repository.database.SituationCalledDataBase
+import java.util.UUID
 
 @Repository
 class SituationCalledRepositoryImplementation : SituationCalledRepository {
@@ -27,6 +28,25 @@ class SituationCalledRepositoryImplementation : SituationCalledRepository {
             }
         }
         return listSituationCalled.toList()
+    }
+
+    override fun getSituationCalledByUUID(situationUUID: UUID): SituationCalled? {
+
+        var situationCalled: SituationCalled? = null
+
+        transaction {
+            SituationCalledDataBase.selectAll().map {
+                situationCalled = SituationCalled(
+                    uuid = it[SituationCalledDataBase.uuid],
+                    label = it[SituationCalledDataBase.label],
+                    statusCode = it[SituationCalledDataBase.statusCode],
+                    createdAt = it[SituationCalledDataBase.createdAt],
+                    modifiedAt = it[SituationCalledDataBase.modifiedAt],
+                )
+                situationCalled
+            }
+        }
+        return situationCalled
     }
 
 }

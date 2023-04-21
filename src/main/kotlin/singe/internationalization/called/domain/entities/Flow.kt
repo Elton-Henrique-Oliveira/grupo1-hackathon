@@ -9,6 +9,7 @@ class Flow (
     var uuid: UUID?,
     var label: String? = null,
     var statusCode: Int? = null,
+    var flowType: List<FlowType>? = null,
     var isInfrastructure: Boolean? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     var modifiedAt: LocalDateTime? = null,

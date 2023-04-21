@@ -34,12 +34,8 @@ class CalledUseCaseImplementation(
         return repository.getCalled()
     }
 
-    override fun updateCalledSituation(calledUUID: UUID, situationUUID: Int): Boolean? {
+    override fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Boolean? {
         if (repository.getCalledByUUID(calledUUID) == null) {
-            return false
-        }
-
-        if (situationUUID == 0) {
             return false
         }
 

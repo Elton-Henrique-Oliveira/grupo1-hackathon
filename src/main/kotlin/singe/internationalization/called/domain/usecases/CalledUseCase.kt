@@ -10,7 +10,7 @@ interface CalledUseCase {
 
     fun getCalled(): List<Called>?
 
-    fun updateCalledSituation(calledUUID: UUID, situationUUID: Int): Boolean?
+    fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Boolean?
 
     fun getCalledByUUID(calledUUID: UUID): Called?
 }
