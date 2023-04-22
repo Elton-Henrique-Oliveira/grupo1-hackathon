@@ -7,7 +7,10 @@ import singe.internationalization.called.infraestructure.webservice.FlowService
 
 
 @RestController
-@CrossOrigin(origins = ["http://10.0.11.143:3000","http://10.0.11.76:3000","http://10.0.11.139:3000"], allowCredentials = "true")
+@CrossOrigin(
+    origins = ["http://10.0.11.143:3000", "http://10.0.11.76:3000", "http://10.0.11.139:3000"],
+    allowCredentials = "true"
+)
 @RequestMapping("/flow")
 class FlowServiceImplementation(
         val flowUserCase: FlowUseCase,

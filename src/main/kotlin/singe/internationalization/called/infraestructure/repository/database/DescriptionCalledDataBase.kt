@@ -30,9 +30,9 @@ fun Query.withDescriptionCalledFilters(filter: List<BasicFilter>?): Query {
             "uuid" -> Op.build { DescriptionCalledDataBase.uuid eq Utils.uuidOrEmpty(it.value) }
             "calledUUID" -> Op.build { DescriptionCalledDataBase.calledUUID eq Utils.uuidOrEmpty(it.value) }
             "title" -> Op.build { DescriptionCalledDataBase.title.lowerCase() like "%" + it.value.lowercase() + "%" }
-            "priority" -> Op.build { DescriptionCalledDataBase.priority.lowerCase() like "%" + it.value.lowercase() + "%" }
-            "typeSystemUUID" -> Op.build { DescriptionCalledDataBase.typeSystemUUID eq Utils.uuidOrEmpty(it.value) }
-            "situation" -> Op.build { DescriptionCalledDataBase.situation eq it.value.toInt()}
+            "description" -> Op.build { DescriptionCalledDataBase.description.lowerCase() like "%" + it.value.lowercase() + "%" }
+            "priorityUUID" -> Op.build { DescriptionCalledDataBase.priorityUUID eq Utils.uuidOrEmpty(it.value) }
+            "typeSystemUUID" -> Op.build { DescriptionCalledDataBase.flowTypeUUID eq Utils.uuidOrEmpty(it.value)}
             "modifiedAtDate" -> Op.build {
                 (DescriptionCalledDataBase.modifiedAt lessEq Utils.dateConverterMax(
                         it.value

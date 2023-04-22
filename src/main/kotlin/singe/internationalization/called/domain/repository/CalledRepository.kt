@@ -13,7 +13,7 @@ interface CalledRepository{
 
     fun getCalled(): List<Called>
 
-    fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Boolean?
+    fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Called?
 
     fun getCalledByUUID(calledUUID: UUID): Called?
 

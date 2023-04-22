@@ -14,7 +14,7 @@ import java.util.*
 
 @RequestMapping("/calledStatus")
 class CalledStatusServiceImplementation(
-        val calledStatusUserCase: CalledStatusUseCase,
+    val calledStatusUserCase: CalledStatusUseCase,
 ) : CalledStatusService {
 
     @GetMapping("")

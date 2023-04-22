@@ -22,7 +22,6 @@ class CalledServiceImplementation(
 
     @PostMapping
     override fun createAndUpdate(@RequestBody called: Called): CalledResponse? {
-        println("elton")
         return usecase.createAndUpdate(called)
     }
 
@@ -35,7 +34,7 @@ class CalledServiceImplementation(
     override fun updateCalledSituation(
         @PathVariable("calledUUID") calledUUID: UUID,
         @PathVariable("situationUUID") situationUUID: UUID
-    ): Boolean {
+    ): CalledResponse? {
         return usecase.updateCalledSituation(calledUUID, situationUUID)!!
     }
 

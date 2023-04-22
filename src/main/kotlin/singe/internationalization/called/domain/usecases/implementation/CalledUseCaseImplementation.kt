@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 import singe.internationalization.called.domain.entities.Called
 import singe.internationalization.called.domain.exceptions.*
 import singe.internationalization.called.domain.repository.CalledRepository
+import singe.internationalization.called.domain.repository.SituationCalledRepository
 import singe.internationalization.called.domain.usecases.CalledUseCase
 import singe.internationalization.called.domain.usecases.response.CalledListAllResponse
 import singe.internationalization.called.domain.usecases.response.CalledResponse
@@ -16,6 +17,7 @@ import java.util.*
 @Service
 class CalledUseCaseImplementation(
     val repository: CalledRepository,
+    val situationRepository: SituationCalledRepository,
 ) : CalledUseCase {
     override fun createAndUpdate(called: Called): CalledResponse {
         return try {
@@ -35,12 +37,15 @@ class CalledUseCaseImplementation(
         return repository.getCalled()
     }
 
-    override fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Boolean? {
+    override fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): CalledResponse? {
         if (repository.getCalledByUUID(calledUUID) == null) {
-            return false
+            return CalledResponse(error = CALL_DOES_NOT_EXIST)
+        }
+        if(situationRepository.getSituationCalledByUUID(situationUUID) == null){
+            return CalledResponse(error = SITUATION_DOES_NOT_EXIST)
         }
 
-        return repository.updateCalledSituation(calledUUID, situationUUID)
+        return CalledResponse(called = repository.updateCalledSituation(calledUUID, situationUUID))
     }
 
     override fun getCalledByUUID(calledUUID: UUID): Called? {

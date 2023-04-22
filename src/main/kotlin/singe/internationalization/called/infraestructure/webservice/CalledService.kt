@@ -17,7 +17,7 @@ interface CalledService {
     fun updateCalledSituation(
         @PathVariable("calledUUID") calledUUID: UUID,
         @PathVariable("situationUUID") situationUUID: UUID
-    ): Boolean?
+    ): CalledResponse?
 
     fun getCalledByUUID(
         @PathVariable("calledUUID") calledUUID: UUID

@@ -44,11 +44,6 @@ fun Query.withCalledFilters(filter: List<BasicFilter>?): Query {
                     it.value
                 ))
             }
-            "createdAtDate" -> Op.build {
-                (CalledDataBase.createdAt lessEq Utils.dateConverterMax(
-                        it.value
-                ))
-            }
 
             else -> throw Exception("invalid column name: ${it.name}")
         }

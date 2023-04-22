@@ -21,6 +21,9 @@ val IDENTIFIER_ALREADY_REGISTERED =
 
 val CALL_DOES_NOT_EXIST =
     CalledException("CALL DOES NOT EXIST","an error occurred because the ticket does not exist in the system")
+
+val SITUATION_DOES_NOT_EXIST =
+    CalledException("SITUATION DOES NOT EXIST","an error occurred because the situation does not exist in the system")
 class CalledException(
     code: String,
     description: String

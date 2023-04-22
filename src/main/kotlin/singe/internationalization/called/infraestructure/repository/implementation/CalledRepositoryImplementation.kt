@@ -6,15 +6,13 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
 import singe.internationalization.called.domain.entities.Called
-import singe.internationalization.called.domain.entities.DescriptionCalled
-import singe.internationalization.called.domain.entities.Flow
-import singe.internationalization.called.domain.entities.SituationCalled
 import singe.internationalization.called.domain.repository.CalledRepository
 import singe.internationalization.called.domain.repository.DescriptionCalledRepository
 import singe.internationalization.called.domain.repository.FlowRepository
 import singe.internationalization.called.domain.repository.SituationCalledRepository
 import singe.internationalization.called.domain.usecases.response.CalledListResponse
-import singe.internationalization.called.infraestructure.repository.database.*
+import singe.internationalization.called.infraestructure.repository.database.CalledDataBase
+import singe.internationalization.called.infraestructure.repository.database.withCalledFilters
 import java.time.LocalDateTime
 import java.util.*
 
@@ -99,11 +97,21 @@ class CalledRepositoryImplementation(
         return listCalled.toList()
     }
 
-    override fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Boolean? {
+    override fun updateCalledSituation(calledUUID: UUID, situationUUID: UUID): Called? {
         return transaction {
             transaction {
+
+                addLogger(StdOutSqlLogger)
+
+                CalledDataBase.update({
+                    CalledDataBase.uuid eq calledUUID!!
+                }) {
+                    it[CalledDataBase.situationUUID] = situationUUID!!
+                    it[CalledDataBase.modifiedAt] = LocalDateTime.now()
+                }
             }
-            false
+
+            getCalledByUUID(calledUUID)!!
         }
     }
 
@@ -174,17 +182,19 @@ class CalledRepositoryImplementation(
                             "identifier" -> CalledDataBase.identifier to SortOrder.DESC
                             else -> CalledDataBase.identifier to SortOrder.DESC
                         }
+
                         "asc" -> when (orderBy) {
                             "identifier" -> CalledDataBase.identifier to SortOrder.ASC
                             else -> CalledDataBase.identifier to SortOrder.ASC
                         }
+
                         else -> error("VALUE NOT FOUND")
                     }
                 )
             actorsQuery.withCalledFilters(filters).withDistinct(true).map {
                 CalledListResponse(
                     calledUUID = it[CalledDataBase.uuid],
-                    identifier =  it[CalledDataBase.identifier],
+                    identifier = it[CalledDataBase.identifier],
                     userName = it[CalledDataBase.userName],
                     flow = flowRepository.getFlowByUUID(it[CalledDataBase.flowUUID]),
                     situation = situationCalledRepository.getSituationCalledByUUID(it[CalledDataBase.situationUUID]),

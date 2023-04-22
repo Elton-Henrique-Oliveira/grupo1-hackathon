@@ -7,6 +7,10 @@ import singe.internationalization.called.infraestructure.webservice.SituationCal
 
 
 @RestController
+@CrossOrigin(
+    origins = ["http://10.0.11.143:3000", "http://10.0.11.76:3000", "http://10.0.11.139:3000"],
+    allowCredentials = "true"
+)
 @RequestMapping("/situationCalled")
 class SituationCalledServiceImplementation(
         val situationCalledUserCase: SituationCalledUseCase,
