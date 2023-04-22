@@ -11,6 +11,7 @@ class Flow (
     var statusCode: Int? = null,
     var flowType: List<FlowType>? = null,
     var isInfrastructure: Boolean? = null,
+    var needValidating: Boolean? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     var modifiedAt: LocalDateTime? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

@@ -11,7 +11,7 @@ object FlowTypeDataBase : Table("flow_type") {
     val flowUUID = reference("flow_uuid", FlowDataBase.uuid)
     val statusCode = integer("status_code").default(0)
     val modifiedAt = datetime("modified_at").defaultExpression(CurrentDateTime)
-    val createAt = datetime("created_at").defaultExpression(CurrentDateTime)
+    val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)
 
     init {
         PrimaryKey(uuid)

@@ -1,21 +1,23 @@
 package singe.internationalization.called.infraestructure.repository.implementation
 
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import org.springframework.stereotype.Repository
 import singe.internationalization.called.domain.entities.DescriptionCalled
 import singe.internationalization.called.domain.repository.DescriptionCalledRepository
+import singe.internationalization.called.domain.repository.FlowTypeRepository
+import singe.internationalization.called.domain.repository.PriorityRepository
 import singe.internationalization.called.infraestructure.repository.database.DescriptionCalledDataBase
 import singe.internationalization.called.infraestructure.repository.database.DescriptionCalledDataBase.uuid
 import java.time.LocalDateTime
 import java.util.*
 
 @Repository
-class DescriptionCalledRepositoryImplementation : DescriptionCalledRepository {
+class DescriptionCalledRepositoryImplementation(
+    val priorityRepository: PriorityRepository,
+    val flowTypeRepository: FlowTypeRepository,
+) : DescriptionCalledRepository {
 
     override fun createDescriptionCalled(descriptionCalled: DescriptionCalled): DescriptionCalled {
 
@@ -25,14 +27,14 @@ class DescriptionCalledRepositoryImplementation : DescriptionCalledRepository {
 
         return transaction {
             val returned: DescriptionCalled = transaction {
-
+                addLogger(StdOutSqlLogger)
                 DescriptionCalledDataBase.insert {
                     it[uuid] = descriptionCalled.uuid!!
                     it[calledUUID] = descriptionCalled.calledUUID!!
                     it[title] = descriptionCalled.title!!
-                    it[priority] = descriptionCalled.priority!!
-                    it[typeSystemUUID] = descriptionCalled.typeSystemUUID!!
-                    it[situation] = descriptionCalled.situation!!
+                    it[description] = descriptionCalled.description!!
+                    it[priorityUUID] = descriptionCalled.priority!!.uuid!!
+                    it[flowTypeUUID] = descriptionCalled.flowType!!.uuid!!
                 }.resultedValues!!
                 descriptionCalled
             }
@@ -54,9 +56,9 @@ class DescriptionCalledRepositoryImplementation : DescriptionCalledRepository {
                     it[uuid] = descriptionCalled.uuid!!
                     it[calledUUID] = descriptionCalled.calledUUID!!
                     it[title] = descriptionCalled.title!!
-                    it[priority] = descriptionCalled.priority!!
-                    it[typeSystemUUID] = descriptionCalled.typeSystemUUID!!
-                    it[situation] = descriptionCalled.situation!!
+                    it[description] = descriptionCalled.description!!
+                    it[priorityUUID] = descriptionCalled.priority!!.uuid!!
+                    it[flowTypeUUID] = descriptionCalled.flowType!!.uuid!!
                     it[modifiedAt] = descriptionCalled.modifiedAt!!
                 }
                 descriptionCalled
@@ -74,9 +76,9 @@ class DescriptionCalledRepositoryImplementation : DescriptionCalledRepository {
                     uuid = it[uuid],
                     calledUUID = it[DescriptionCalledDataBase.calledUUID],
                     title = it[DescriptionCalledDataBase.title],
-                    priority = it[DescriptionCalledDataBase.priority],
-                    situation = it[DescriptionCalledDataBase.situation],
-                    typeSystemUUID = it[DescriptionCalledDataBase.typeSystemUUID],
+                    description = it[DescriptionCalledDataBase.description],
+                    priority = priorityRepository.getPriorityByUUID(it[DescriptionCalledDataBase.priorityUUID]),
+                    flowType = flowTypeRepository.getFlowTypeByUUID(it[DescriptionCalledDataBase.flowTypeUUID]),
                 )
                 listDescriptionCalled.add(descriptionCalled)
             }
@@ -93,31 +95,31 @@ class DescriptionCalledRepositoryImplementation : DescriptionCalledRepository {
                     uuid = it[DescriptionCalledDataBase.uuid],
                     calledUUID = it[DescriptionCalledDataBase.calledUUID],
                     title = it[DescriptionCalledDataBase.title],
-                    priority = it[DescriptionCalledDataBase.priority],
-                    situation = it[DescriptionCalledDataBase.situation],
-                    typeSystemUUID = it[DescriptionCalledDataBase.typeSystemUUID],
+                    description = it[DescriptionCalledDataBase.description],
+                    priority = priorityRepository.getPriorityByUUID(it[DescriptionCalledDataBase.priorityUUID]),
+                    flowType = flowTypeRepository.getFlowTypeByUUID(it[DescriptionCalledDataBase.flowTypeUUID]),
                 )
             }
         }
         return descriptionCalled
     }
 
-    override fun getDescriptionCalledByDCalledUUID(calledUUID: UUID): List<DescriptionCalled>? {
-        val listDescriptionCalled: MutableList<DescriptionCalled> = mutableListOf()
+    override fun getDescriptionCalledByCalledUUID(calledUUID: UUID): DescriptionCalled? {
+        var descriptionCalled: DescriptionCalled? = null
 
         transaction {
             DescriptionCalledDataBase.select(DescriptionCalledDataBase.calledUUID eq calledUUID).map {
-                val descriptionCalled = DescriptionCalled(
+                descriptionCalled = DescriptionCalled(
                     uuid = it[uuid],
                     calledUUID = it[DescriptionCalledDataBase.calledUUID],
                     title = it[DescriptionCalledDataBase.title],
-                    priority = it[DescriptionCalledDataBase.priority],
-                    situation = it[DescriptionCalledDataBase.situation],
-                    typeSystemUUID = it[DescriptionCalledDataBase.typeSystemUUID],
+                    description = it[DescriptionCalledDataBase.description],
+                    priority = priorityRepository.getPriorityByUUID(it[DescriptionCalledDataBase.priorityUUID]),
+                    flowType = flowTypeRepository.getFlowTypeByUUID(it[DescriptionCalledDataBase.flowTypeUUID]),
                 )
-                listDescriptionCalled.add(descriptionCalled)
+                descriptionCalled
             }
         }
-        return listDescriptionCalled.toList()
+        return descriptionCalled
     }
 }

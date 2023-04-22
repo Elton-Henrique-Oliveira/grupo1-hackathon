@@ -12,7 +12,7 @@ class Called(
     var situation: SituationCalled? = null,
     var branch: Long? = null,
     var telephone: Long? = null,
-    var descriptionCalled: List<DescriptionCalled>? = null,
+    var descriptionCalled: DescriptionCalled    ? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     var modifiedAt: LocalDateTime? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

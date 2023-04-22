@@ -28,6 +28,7 @@ class FlowRepositoryImplementation(
                     statusCode = it[FlowDataBase.statusCode],
                     flowType = flowTypeRepository.getFlowTypeByFlowUUID(it[FlowDataBase.uuid]),
                     isInfrastructure = it[FlowDataBase.isInfrastructure],
+                    needValidating = it[FlowDataBase.needValidating],
                     createdAt = it[FlowDataBase.createdAt],
                     modifiedAt = it[FlowDataBase.modifiedAt],
                 )
@@ -45,8 +46,8 @@ class FlowRepositoryImplementation(
                     uuid = it[FlowDataBase.uuid],
                     label = it[FlowDataBase.label],
                     statusCode = it[FlowDataBase.statusCode],
-                    //flowType = flowTypeRepository.getFlowTypeByFlowUUID(it[FlowDataBase.uuid]),
                     isInfrastructure = it[FlowDataBase.isInfrastructure],
+                    needValidating = it[FlowDataBase.needValidating],
                     createdAt = it[FlowDataBase.createdAt],
                     modifiedAt = it[FlowDataBase.modifiedAt],
                 )

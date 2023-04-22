@@ -10,6 +10,7 @@ object FlowDataBase : Table("flow") {
     val label = varchar("label", 100)
     val statusCode = integer("status_code")
     val isInfrastructure = bool("is_infrastructure")
+    val needValidating = bool("need_validating")
     val modifiedAt = datetime("modified_at").defaultExpression(CurrentDateTime)
     val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)
 

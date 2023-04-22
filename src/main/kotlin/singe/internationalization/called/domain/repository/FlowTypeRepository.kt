@@ -7,4 +7,6 @@ interface FlowTypeRepository {
     fun getFlowType(): List<FlowType>
 
     fun getFlowTypeByFlowUUID(flowUUID: UUID): List<FlowType>
+
+    fun getFlowTypeByUUID(uuid: UUID): FlowType?
 }

@@ -8,9 +8,9 @@ class DescriptionCalled(
     var uuid: UUID?,
     var calledUUID: UUID? = null,
     var title: String? = null,
-    var priority: String? = null,
-    var situation: Int? = null,
-    var typeSystemUUID: UUID? = null,
+    var description: String? = null,
+    var priority: Priority? = null,
+    var flowType: FlowType? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     var modifiedAt: LocalDateTime? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

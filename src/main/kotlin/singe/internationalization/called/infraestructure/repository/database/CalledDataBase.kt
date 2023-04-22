@@ -34,8 +34,17 @@ fun Query.withCalledFilters(filter: List<BasicFilter>?): Query {
             "uuid" -> Op.build { CalledDataBase.uuid eq Utils.uuidOrEmpty(it.value) }
             "identifier" -> Op.build { CalledDataBase.identifier eq it.value.toLong()}
             "userName" -> Op.build { CalledDataBase.userName.lowerCase() like "%" + it.value.lowercase() + "%" }
+            "flowUUID" -> Op.build { CalledDataBase.flowUUID eq Utils.uuidOrEmpty(it.value) }
+            "situationUUID" -> Op.build { CalledDataBase.situationUUID eq Utils.uuidOrEmpty(it.value) }
+            "branch" -> Op.build { CalledDataBase.branch eq it.value.toLong()}
+            "telephone" -> Op.build { CalledDataBase.telephone eq it.value.toLong()}
             "modifiedAtDate" -> Op.build {
-                 (CalledDataBase.modifiedAt lessEq Utils.dateConverterMax(
+                (CalledDataBase.modifiedAt lessEq Utils.dateConverterMax(
+                    it.value
+                ))
+            }
+            "createdAtDate" -> Op.build {
+                (CalledDataBase.createdAt lessEq Utils.dateConverterMax(
                     it.value
                 ))
             }

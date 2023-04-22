@@ -1,8 +1,10 @@
 package singe.internationalization.called.domain.repository
 
+import org.springframework.stereotype.Repository
 import singe.internationalization.called.domain.entities.DescriptionCalled
 import java.util.*
 
+@Repository
 interface DescriptionCalledRepository {
 
    fun createDescriptionCalled(descriptionCalled: DescriptionCalled): DescriptionCalled
@@ -13,5 +15,5 @@ interface DescriptionCalledRepository {
 
    fun getDescriptionCalledByUUID(uuid: UUID): DescriptionCalled?
 
-   fun getDescriptionCalledByDCalledUUID(calledUUID: UUID): List<DescriptionCalled>?
+   fun getDescriptionCalledByCalledUUID(calledUUID: UUID): DescriptionCalled?
 }

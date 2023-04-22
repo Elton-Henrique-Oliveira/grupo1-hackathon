@@ -7,11 +7,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
-import singe.internationalization.called.domain.entities.Flow
 import singe.internationalization.called.domain.entities.FlowType
-import singe.internationalization.called.domain.repository.FlowRepository
 import singe.internationalization.called.domain.repository.FlowTypeRepository
-import singe.internationalization.called.infraestructure.repository.database.FlowDataBase
 import singe.internationalization.called.infraestructure.repository.database.FlowTypeDataBase
 import java.util.*
 
@@ -30,7 +27,7 @@ class FlowTypeRepositoryImplementation : FlowTypeRepository {
                     label = it[FlowTypeDataBase.label],
                     statusCode = it[FlowTypeDataBase.statusCode],
                     flowUUID = it[FlowTypeDataBase.flowUUID],
-                    createdAt = it[FlowTypeDataBase.createAt],
+                    createdAt = it[FlowTypeDataBase.createdAt],
                     modifiedAt = it[FlowTypeDataBase.modifiedAt],
                 )
                 listFlowType.add(flowType)
@@ -52,13 +49,35 @@ class FlowTypeRepositoryImplementation : FlowTypeRepository {
                     label = it[FlowTypeDataBase.label],
                     statusCode = it[FlowTypeDataBase.statusCode],
                     flowUUID = it[FlowTypeDataBase.flowUUID],
-                    createdAt = it[FlowTypeDataBase.createAt],
+                    createdAt = it[FlowTypeDataBase.createdAt],
                     modifiedAt = it[FlowTypeDataBase.modifiedAt],
                 )
                 listFlowType.add(flowType)
             }
         }
         return listFlowType.toList()
+    }
+
+    override fun getFlowTypeByUUID(uuid: UUID): FlowType? {
+
+        var flowType: FlowType? = null
+        transaction {
+            addLogger(StdOutSqlLogger)
+            FlowTypeDataBase.select(
+                FlowTypeDataBase.uuid eq uuid
+            ).map {
+                flowType = FlowType(
+                    uuid = it[FlowTypeDataBase.uuid],
+                    label = it[FlowTypeDataBase.label],
+                    statusCode = it[FlowTypeDataBase.statusCode],
+                    flowUUID = it[FlowTypeDataBase.flowUUID],
+                    createdAt = it[FlowTypeDataBase.createdAt],
+                    modifiedAt = it[FlowTypeDataBase.modifiedAt],
+                )
+                flowType
+            }
+        }
+        return flowType
     }
 
 }
