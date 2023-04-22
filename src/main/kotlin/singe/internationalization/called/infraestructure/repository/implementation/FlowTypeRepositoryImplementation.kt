@@ -30,7 +30,7 @@ class FlowTypeRepositoryImplementation : FlowTypeRepository {
                     label = it[FlowTypeDataBase.label],
                     statusCode = it[FlowTypeDataBase.statusCode],
                     flowUUID = it[FlowTypeDataBase.flowUUID],
-                    createdAt = it[FlowTypeDataBase.createAt],
+                    createdAt = it[FlowTypeDataBase.createdAt],
                     modifiedAt = it[FlowTypeDataBase.modifiedAt],
                 )
                 listFlowType.add(flowType)
@@ -52,7 +52,7 @@ class FlowTypeRepositoryImplementation : FlowTypeRepository {
                     label = it[FlowTypeDataBase.label],
                     statusCode = it[FlowTypeDataBase.statusCode],
                     flowUUID = it[FlowTypeDataBase.flowUUID],
-                    createdAt = it[FlowTypeDataBase.createAt],
+                    createdAt = it[FlowTypeDataBase.createdAt],
                     modifiedAt = it[FlowTypeDataBase.modifiedAt],
                 )
                 listFlowType.add(flowType)
