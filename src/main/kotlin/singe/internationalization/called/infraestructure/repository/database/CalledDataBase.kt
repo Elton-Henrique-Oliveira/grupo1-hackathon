@@ -5,7 +5,6 @@ import br.com.lince.singe.core.shared.webservice.BasicFilter
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
-import singe.internationalization.called.domain.entities.FlowType
 
 object CalledDataBase : Table("called") {
     val uuid = uuid("uuid").uniqueIndex()
@@ -32,7 +31,6 @@ fun Query.withCalledFilters(filter: List<BasicFilter>?): Query {
             "identifier" -> Op.build { CalledDataBase.identifier eq it.value.toLong()}
             "userName" -> Op.build { CalledDataBase.userName.lowerCase() like "%" + it.value.lowercase() + "%" }
             "situation" -> Op.build { SituationCalledDataBase.label like "%" + it.value.lowercase() + "%"}
-            "branch" -> Op.build { FlowType. eq it.value.toBoolean()}
             "flowUUID" -> Op.build { CalledDataBase.flowUUID eq Utils.uuidOrEmpty(it.value) }
             "situationUUID" -> Op.build { CalledDataBase.situationUUID eq Utils.uuidOrEmpty(it.value) }
             "branch" -> Op.build { CalledDataBase.branch eq it.value.toLong()}
