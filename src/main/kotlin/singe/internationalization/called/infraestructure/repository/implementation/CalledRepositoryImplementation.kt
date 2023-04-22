@@ -104,9 +104,9 @@ class CalledRepositoryImplementation(
                 addLogger(StdOutSqlLogger)
 
                 CalledDataBase.update({
-                    CalledDataBase.uuid eq calledUUID!!
+                    CalledDataBase.uuid eq calledUUID
                 }) {
-                    it[CalledDataBase.situationUUID] = situationUUID!!
+                    it[CalledDataBase.situationUUID] = situationUUID
                     it[CalledDataBase.modifiedAt] = LocalDateTime.now()
                 }
             }

@@ -15,6 +15,13 @@ val CALLED_NOT_INFORMED =
 val DESCRIPTION_CALLED_DOES_NOT_EXIST =
     DescriptionCalledException("DESCRIPTION CALLED DOES NOT EXIST","an error occurred because the description called does not exist in the system")
 
+val RETURNED_DESCRIPTION_CALLED_CREATE_ERROR =
+    DescriptionCalledException("RETURNED DESCRIPTION CALLED CREATE ERROR", "An error has ocurred on create returned description called")
+
+val RETURNED_DESCRIPTION_CALLED_DOES_NOT_EXIST =
+    DescriptionCalledException("RETURNED DESCRIPTION CALLED DOES NOT EXIST","an error occurred because the returned description called does not exist in the system")
+
+
 class DescriptionCalledException(
     code: String,
     description: String

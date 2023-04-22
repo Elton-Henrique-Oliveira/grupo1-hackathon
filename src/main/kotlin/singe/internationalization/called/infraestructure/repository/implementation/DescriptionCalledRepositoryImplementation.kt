@@ -8,6 +8,7 @@ import singe.internationalization.called.domain.entities.DescriptionCalled
 import singe.internationalization.called.domain.repository.DescriptionCalledRepository
 import singe.internationalization.called.domain.repository.FlowTypeRepository
 import singe.internationalization.called.domain.repository.PriorityRepository
+import singe.internationalization.called.domain.repository.ReturnedCalledRepository
 import singe.internationalization.called.infraestructure.repository.database.DescriptionCalledDataBase
 import singe.internationalization.called.infraestructure.repository.database.DescriptionCalledDataBase.uuid
 import java.time.LocalDateTime
@@ -17,6 +18,7 @@ import java.util.*
 class DescriptionCalledRepositoryImplementation(
     val priorityRepository: PriorityRepository,
     val flowTypeRepository: FlowTypeRepository,
+    val returnedCalledRepository: ReturnedCalledRepository,
 ) : DescriptionCalledRepository {
 
     override fun createDescriptionCalled(descriptionCalled: DescriptionCalled): DescriptionCalled {
@@ -77,6 +79,7 @@ class DescriptionCalledRepositoryImplementation(
                     calledUUID = it[DescriptionCalledDataBase.calledUUID],
                     title = it[DescriptionCalledDataBase.title],
                     description = it[DescriptionCalledDataBase.description],
+                    returnedCalled = returnedCalledRepository.getReturnedCalledByDescriptionCalledUUID(it[uuid]),
                     priority = priorityRepository.getPriorityByUUID(it[DescriptionCalledDataBase.priorityUUID]),
                     flowType = flowTypeRepository.getFlowTypeByUUID(it[DescriptionCalledDataBase.flowTypeUUID]),
                 )
@@ -96,6 +99,7 @@ class DescriptionCalledRepositoryImplementation(
                     calledUUID = it[DescriptionCalledDataBase.calledUUID],
                     title = it[DescriptionCalledDataBase.title],
                     description = it[DescriptionCalledDataBase.description],
+                    returnedCalled = returnedCalledRepository.getReturnedCalledByDescriptionCalledUUID(it[DescriptionCalledDataBase.uuid]),
                     priority = priorityRepository.getPriorityByUUID(it[DescriptionCalledDataBase.priorityUUID]),
                     flowType = flowTypeRepository.getFlowTypeByUUID(it[DescriptionCalledDataBase.flowTypeUUID]),
                 )
@@ -114,6 +118,7 @@ class DescriptionCalledRepositoryImplementation(
                     calledUUID = it[DescriptionCalledDataBase.calledUUID],
                     title = it[DescriptionCalledDataBase.title],
                     description = it[DescriptionCalledDataBase.description],
+                    returnedCalled = returnedCalledRepository.getReturnedCalledByDescriptionCalledUUID(it[uuid]),
                     priority = priorityRepository.getPriorityByUUID(it[DescriptionCalledDataBase.priorityUUID]),
                     flowType = flowTypeRepository.getFlowTypeByUUID(it[DescriptionCalledDataBase.flowTypeUUID]),
                 )

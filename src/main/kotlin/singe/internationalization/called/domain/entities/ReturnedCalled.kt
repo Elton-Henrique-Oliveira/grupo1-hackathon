@@ -4,14 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 import java.util.*
 
-class DescriptionCalled(
+class ReturnedCalled (
     var uuid: UUID?,
-    var calledUUID: UUID? = null,
-    var title: String? = null,
-    var description: String? = null,
-    var priority: Priority? = null,
-    var flowType: FlowType? = null,
-    var returnedCalled: List<ReturnedCalled>? = null,
+    var returnedText: String? = null,
+    var descriptionCalledUUID: UUID? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     var modifiedAt: LocalDateTime? = null,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

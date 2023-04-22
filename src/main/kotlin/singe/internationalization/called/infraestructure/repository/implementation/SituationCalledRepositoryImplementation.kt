@@ -1,5 +1,7 @@
 package singe.internationalization.called.infraestructure.repository.implementation
 
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
@@ -35,7 +37,7 @@ class SituationCalledRepositoryImplementation : SituationCalledRepository {
         var situationCalled: SituationCalled? = null
 
         transaction {
-            SituationCalledDataBase.selectAll().map {
+            SituationCalledDataBase.select(SituationCalledDataBase.uuid eq situationUUID).map {
                 situationCalled = SituationCalled(
                     uuid = it[SituationCalledDataBase.uuid],
                     label = it[SituationCalledDataBase.label],
