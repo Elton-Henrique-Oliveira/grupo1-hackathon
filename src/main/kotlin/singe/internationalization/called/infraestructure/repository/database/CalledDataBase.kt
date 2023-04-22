@@ -3,12 +3,8 @@ package singe.internationalization.called.infraestructure.repository.database
 import br.com.lince.singe.core.shared.utils.Utils
 import br.com.lince.singe.core.shared.webservice.BasicFilter
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
-import singe.internationalization.called.domain.entities.DescriptionCalled
 
 object CalledDataBase : Table("called") {
     val uuid = uuid("uuid").uniqueIndex()
@@ -46,6 +42,11 @@ fun Query.withCalledFilters(filter: List<BasicFilter>?): Query {
             "createdAtDate" -> Op.build {
                 (CalledDataBase.createdAt lessEq Utils.dateConverterMax(
                     it.value
+                ))
+            }
+            "createdAtDate" -> Op.build {
+                (CalledDataBase.createdAt lessEq Utils.dateConverterMax(
+                        it.value
                 ))
             }
 

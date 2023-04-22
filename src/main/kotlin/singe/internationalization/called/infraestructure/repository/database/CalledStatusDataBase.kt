@@ -7,10 +7,9 @@ import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 
 
-object FlowTypeDataBase : Table("flow_type") {
+object CalledStatusDataBase : Table("flow_type") {
     val uuid = uuid("uuid")
     val label = varchar("label", 60)
-    val flowUUID = reference("flow_uuid", FlowDataBase.uuid)
     val statusCode = integer("status_code").default(0)
     val modifiedAt = datetime("modified_at").defaultExpression(CurrentDateTime)
     val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)
@@ -21,23 +20,22 @@ object FlowTypeDataBase : Table("flow_type") {
     }
 }
 
-fun Query.withFlowTypeFilters(filter: List<BasicFilter>?): Query {
+fun Query.withCalledStatusFilters(filter: List<BasicFilter>?): Query {
     if (filter == null) {
         return this
     }
     val filters = filter.filter { it.name.isNotBlank() }.map {
         when (it.name) {
-            "uuid" -> Op.build { FlowTypeDataBase.uuid eq Utils.uuidOrEmpty(it.value) }
-            "label" -> Op.build { FlowTypeDataBase.label.lowerCase() like "%" + it.value.lowercase() + "%" }
-            "flowUUID" -> Op.build { FlowTypeDataBase.flowUUID eq Utils.uuidOrEmpty(it.value) }
-            "statusCode" -> Op.build { FlowTypeDataBase.statusCode eq it.value.toInt()}
+            "uuid" -> Op.build { CalledStatusDataBase.uuid eq Utils.uuidOrEmpty(it.value) }
+            "label" -> Op.build { CalledStatusDataBase.label.lowerCase() like "%" + it.value.lowercase() + "%" }
+            "statusCode" -> Op.build { CalledStatusDataBase.statusCode eq it.value.toInt()}
             "modifiedAtDate" -> Op.build {
-                (FlowTypeDataBase.modifiedAt lessEq Utils.dateConverterMax(
+                (CalledStatusDataBase.modifiedAt lessEq Utils.dateConverterMax(
                         it.value
                 ))
             }
             "createdAtDate" -> Op.build {
-                (FlowTypeDataBase.createdAt lessEq Utils.dateConverterMax(
+                (CalledStatusDataBase.createdAt lessEq Utils.dateConverterMax(
                         it.value
                 ))
             }
