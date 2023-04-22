@@ -26,7 +26,7 @@ class CalledRepositoryImplementation(
 
         called.uuid = idGeneratedVendor
 
-
+        println()
         val returned: Called = transaction {
             addLogger(StdOutSqlLogger)
 
