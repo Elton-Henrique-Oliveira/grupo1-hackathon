@@ -9,7 +9,7 @@ import java.util.*
 object UserDataBase : Table("user") {
     val uuid = uuid("uuid").uniqueIndex()
     val name = varchar("name", 200)
-    val userType = reference("user_type", UserTypeTable.uuid)
+    val userType = reference("user_type", UserTypeDataBase.uuid)
     val isActive = bool("is_active")
     val email = varchar("email", 200).nullable()
     val authenticationRecord = varchar("authentication_record", 200).uniqueIndex()
@@ -29,7 +29,7 @@ object UserDataBase : Table("user") {
 /**
  * The exposed definition of table used to store user type
  */
-object UserTypeTable : Table("user_type") {
+object UserTypeDataBase : Table("user_type") {
     val uuid = uuid("uuid")
     val label = varchar("label", 60)
     val code = integer("code").uniqueIndex()

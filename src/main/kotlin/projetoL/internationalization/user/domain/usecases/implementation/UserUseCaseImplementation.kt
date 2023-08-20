@@ -6,14 +6,21 @@ import projetoL.internationalization.user.domain.usecases.UserUseCase
 import projetoL.internationalization.user.domain.usecases.response.UserListAllResponse
 import projetoL.internationalization.user.domain.usecases.response.UserResponse
 import org.springframework.stereotype.Service
+import projetoL.core.shared.utils.Utils
+import projetoL.core.shared.webservice.TotalPages
+import projetoL.internationalization.user.domain.repository.UserRepository
 import java.util.*
 
 @Service
-class UserUseCaseImplementation (
-
-) : UserUseCase{
+class UserUseCaseImplementation(
+    val userRepository: UserRepository
+) : UserUseCase {
     override fun createAndUpdate(user: User): UserResponse? {
-        TODO("Not yet implemented")
+        return if (user.uuid == null) {
+            UserResponse(userRepository.create(user))
+        } else {
+            UserResponse(userRepository.update(user))
+        }
     }
 
     override fun getAllUser(
@@ -23,11 +30,23 @@ class UserUseCaseImplementation (
         sortBy: String,
         filters: List<BasicFilter>?
     ): UserListAllResponse? {
-        TODO("Not yet implemented")
+        return try {
+            val totalPages: TotalPages? = Utils.calculateTotalPages(userRepository.getCountAllUser(filters), size)
+
+            UserListAllResponse(
+                user = userRepository.getAllUser(page, size, orderBy, sortBy, filters),
+                page = page,
+                size = size,
+                numberPages = totalPages!!.totalPages,
+                error = null
+            )
+        } catch (e: Exception) {
+            UserListAllResponse(error = null)
+        }
     }
 
     override fun getUserByUUID(uuid: UUID): User? {
-        TODO("Not yet implemented")
+        return userRepository.getByUUID(uuid)
     }
 
 

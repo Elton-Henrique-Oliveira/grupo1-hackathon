@@ -1,15 +1,18 @@
 package projetoL.internationalization.user.infraestructure.repository.implementation
 
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.springframework.stereotype.Repository
 import projetoL.core.shared.webservice.BasicFilter
+import projetoL.internationalization.enterprise.domain.entities.Enterprise
+import projetoL.internationalization.enterprise.infraestructure.repository.database.EnterpriseDataBase
+import projetoL.internationalization.enterprise.infraestructure.repository.database.withEnterpriseFilters
 import projetoL.internationalization.user.domain.entities.User
+import projetoL.internationalization.user.domain.entities.UserType
 import projetoL.internationalization.user.domain.repository.UserRepository
 import projetoL.internationalization.user.infraestructure.repository.database.UserDataBase
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
-import org.springframework.stereotype.Repository
+import projetoL.internationalization.user.infraestructure.repository.database.UserTypeDataBase
+import projetoL.internationalization.user.infraestructure.repository.database.withUserFilters
 import java.time.LocalDateTime
 import java.util.*
 
@@ -61,7 +64,33 @@ class UserRepositoryImplementation : UserRepository {
     }
 
     override fun getByUUID(uuid: UUID): User? {
-        TODO("Not yet implemented")
+        var user: User? = null
+
+        return transaction {
+
+            addLogger(StdOutSqlLogger)
+            UserDataBase
+                .select { UserDataBase.uuid eq uuid }
+                .map {
+                    user = User(
+                        uuid = it[UserDataBase.uuid],
+                        name = it[UserDataBase.name],
+                        userType = UserType(
+                            uuid = it[UserTypeDataBase.uuid],
+                            code = it[UserTypeDataBase.code],
+                            label = it[UserTypeDataBase.label]
+                        ),
+                        isActive = it[UserDataBase.isActive],
+                        email = it[UserDataBase.email],
+                        authenticationRecord = it[UserDataBase.authenticationRecord],
+                        password = it[UserDataBase.password],
+                        contact = it[UserDataBase.contact],
+                        modifiedAt = it[UserDataBase.modifiedAt],
+                        createdAt = it[UserDataBase.createAt]
+                    )
+                }
+            user
+        }
     }
 
     override fun getAllUser(
@@ -71,11 +100,55 @@ class UserRepositoryImplementation : UserRepository {
         sortBy: String,
         filters: List<BasicFilter>?
     ): List<User>? {
-        TODO("Not yet implemented")
+        val listUser: MutableList<User> = mutableListOf()
+
+        transaction {
+            addLogger(StdOutSqlLogger)
+            val actorsQuery = UserDataBase
+                .innerJoin(UserTypeDataBase, {UserTypeDataBase.uuid}, {UserDataBase.userType})
+                .selectAll()
+                .orderBy(
+                    when (sortBy) {
+                        "desc" -> when (orderBy) {
+                            "name" -> UserDataBase.name to SortOrder.DESC
+                            else -> UserDataBase.name to SortOrder.DESC
+                        }
+
+                        "asc" -> when (orderBy) {
+                            "name" -> UserDataBase.name to SortOrder.ASC
+                            else -> UserDataBase.name to SortOrder.ASC
+                        }
+
+                        else -> error("VALUE NOT FOUND")
+                    }
+                )
+            actorsQuery.withUserFilters(filters).withDistinct(true).map {
+                val user = User(
+                    uuid = it[UserDataBase.uuid],
+                    name = it[UserDataBase.name],
+                    userType = UserType(
+                        uuid = it[UserTypeDataBase.uuid],
+                        code = it[UserTypeDataBase.code],
+                        label = it[UserTypeDataBase.label]
+                    ),
+                    isActive = it[UserDataBase.isActive],
+                    email = it[UserDataBase.email],
+                    authenticationRecord = it[UserDataBase.authenticationRecord],
+                    password = it[UserDataBase.password],
+                    contact = it[UserDataBase.contact],
+                    modifiedAt = it[UserDataBase.modifiedAt],
+                    createdAt = it[UserDataBase.createAt]
+                )
+
+                listUser.add(user)
+            }
+        }
+
+        return listUser.toList()
     }
 
     override fun getCountAllUser(filters: List<BasicFilter>?): Int {
-        TODO("Not yet implemented")
+        return UserDataBase.selectAll().withUserFilters(filters).count().toInt()
     }
 
 }
