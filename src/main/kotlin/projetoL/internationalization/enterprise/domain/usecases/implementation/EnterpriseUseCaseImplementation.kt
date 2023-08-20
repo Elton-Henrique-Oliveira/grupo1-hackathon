@@ -9,6 +9,10 @@ import projetoL.internationalization.enterprise.domain.usecases.EnterpriseUseCas
 import projetoL.internationalization.enterprise.domain.usecases.response.EnterpriseListAllResponse
 import projetoL.internationalization.enterprise.domain.usecases.response.EnterpriseResponse
 import org.springframework.stereotype.Service
+import projetoL.internationalization.enterprise.domain.exceptions.EMPRESA_NAO_CADASTRADA
+import projetoL.internationalization.enterprise.domain.exceptions.NOME_NAO_INFORMADO
+import projetoL.internationalization.enterprise.domain.exceptions.SERVIDOR_NAO_ENCONTRADO
+import projetoL.internationalization.enterprise.domain.exceptions.UM_ERRO_OCORREU_NA_EMPRESA
 import java.util.*
 
 
@@ -18,8 +22,20 @@ class EnterpriseUseCaseImplementation(
 ) : EnterpriseUseCase {
     override fun createAndUpdate(enterprise: Enterprise): EnterpriseResponse? {
 
+        if (enterpriseRepository.getServerByUUID(enterprise.server!!.uuid!!) == null) {
+            return EnterpriseResponse(error = SERVIDOR_NAO_ENCONTRADO)
+        }
+
+        if (enterprise.name == "" || enterprise.name == null) {
+            return EnterpriseResponse(error = NOME_NAO_INFORMADO)
+        }
+
         if (enterprise.uuid == null) {
             return EnterpriseResponse(enterpriseRepository.create(enterprise))
+        }
+
+        if(enterpriseRepository.getByUUID(enterprise.uuid!!) == null){
+            return EnterpriseResponse(error = EMPRESA_NAO_CADASTRADA)
         }
 
         return EnterpriseResponse(enterpriseRepository.update(enterprise))
@@ -33,7 +49,8 @@ class EnterpriseUseCaseImplementation(
         filters: List<BasicFilter>?,
     ): EnterpriseListAllResponse? {
         return try {
-            val totalPages : TotalPages? = Utils.calculateTotalPages(enterpriseRepository.getCountAllEnterprise(filters), size)
+            val totalPages: TotalPages? =
+                Utils.calculateTotalPages(enterpriseRepository.getCountAllEnterprise(filters), size)
 
             EnterpriseListAllResponse(
                 enterprise = enterpriseRepository.getAllEnterprise(page, size, orderBy, sortBy, filters),
@@ -43,7 +60,7 @@ class EnterpriseUseCaseImplementation(
                 error = null
             )
         } catch (e: Exception) {
-            EnterpriseListAllResponse(error = null)
+            EnterpriseListAllResponse(error = UM_ERRO_OCORREU_NA_EMPRESA)
         }
     }
 

@@ -1,15 +1,14 @@
 package projetoL.internationalization.user.infraestructure.webservice.implementation
 
+import org.springframework.web.bind.annotation.*
 import projetoL.core.shared.webservice.BasicFilter
 import projetoL.internationalization.user.domain.entities.User
 import projetoL.internationalization.user.domain.usecases.UserUseCase
 import projetoL.internationalization.user.domain.usecases.response.UserListAllResponse
 import projetoL.internationalization.user.domain.usecases.response.UserResponse
 import projetoL.internationalization.user.infraestructure.webservice.UserService
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import projetoL.internationalization.user.domain.entities.LoginRequest
+import projetoL.internationalization.user.domain.entities.PasswordChangeRequest
 import java.util.*
 
 
@@ -22,10 +21,15 @@ import java.util.*
 class UserServiceImplementation (
     val userUseCase: UserUseCase
 ) : UserService{
-    override fun createAndUpdate(user: User): UserResponse? {
+
+    @PostMapping
+    override fun createAndUpdate(
+        @RequestBody user: User
+    ): UserResponse? {
         return userUseCase.createAndUpdate(user)
     }
 
+    @GetMapping("")
     override fun getAllUser(
         @RequestParam("page", required = false, defaultValue = "1") page: Int,
         @RequestParam("size", required = false, defaultValue = "30") size: Int,
@@ -41,8 +45,24 @@ class UserServiceImplementation (
             filters = filter
         )
     }
-
-    override fun getUserByUUID(uuid: UUID): User? {
+    @GetMapping("/{uuid}")
+    override fun getUserByUUID(
+        @PathVariable("uuid") uuid: UUID
+    ): User? {
         return userUseCase.getUserByUUID(uuid)
+    }
+
+    @PostMapping("/login")
+    override fun requestLogin(
+        @RequestBody loginRequest: LoginRequest
+    ) : UserResponse? {
+        return userUseCase.requestLogin(loginRequest)
+    }
+
+    @PostMapping("/alterPassword")
+    override fun passwordChangeRequest(
+        @RequestBody passwordChangeRequest: PasswordChangeRequest
+    ) : UserResponse? {
+        return userUseCase.passwordChangeRequest(passwordChangeRequest)
     }
 }

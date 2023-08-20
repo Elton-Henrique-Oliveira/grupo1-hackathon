@@ -1,6 +1,8 @@
 package projetoL.internationalization.user.domain.usecases
 
 import projetoL.core.shared.webservice.BasicFilter
+import projetoL.internationalization.user.domain.entities.LoginRequest
+import projetoL.internationalization.user.domain.entities.PasswordChangeRequest
 import projetoL.internationalization.user.domain.entities.User
 import projetoL.internationalization.user.domain.usecases.response.UserListAllResponse
 import projetoL.internationalization.user.domain.usecases.response.UserResponse
@@ -19,4 +21,8 @@ interface UserUseCase {
     ) : UserListAllResponse?
 
     fun getUserByUUID(uuid: UUID) : User?
+
+    fun requestLogin(loginRequest: LoginRequest) : UserResponse?
+
+    fun passwordChangeRequest(passwordChangeRequest: PasswordChangeRequest) : UserResponse?
 }

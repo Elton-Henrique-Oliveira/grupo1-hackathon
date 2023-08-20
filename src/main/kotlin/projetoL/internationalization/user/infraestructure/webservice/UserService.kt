@@ -1,11 +1,14 @@
 package projetoL.internationalization.user.infraestructure.webservice
 
+import org.springframework.web.bind.annotation.PathVariable
 import projetoL.core.shared.webservice.BasicFilter
 import projetoL.internationalization.user.domain.entities.User
 import projetoL.internationalization.user.domain.usecases.response.UserListAllResponse
 import projetoL.internationalization.user.domain.usecases.response.UserResponse
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
+import projetoL.internationalization.user.domain.entities.LoginRequest
+import projetoL.internationalization.user.domain.entities.PasswordChangeRequest
 import java.util.UUID
 
 interface UserService {
@@ -23,6 +26,14 @@ interface UserService {
     ) : UserListAllResponse?
 
     fun getUserByUUID(
-        @RequestParam("uuid") uuid: UUID
+        @PathVariable("uuid") uuid: UUID
     ) : User?
+
+    fun requestLogin(
+        @RequestBody loginRequest: LoginRequest
+    ) : UserResponse?
+
+    fun passwordChangeRequest(
+        @RequestBody passwordChangeRequest: PasswordChangeRequest
+    ) : UserResponse?
 }

@@ -20,7 +20,9 @@ class EnterpriseServiceImplementation(
 ) : EnterpriseService {
 
     @PostMapping
-    override fun createAndUpdate(enterprise: Enterprise): EnterpriseResponse? {
+    override fun createAndUpdate(
+        @RequestBody enterprise: Enterprise
+    ): EnterpriseResponse? {
         return enterpriseUseCase.createAndUpdate(enterprise)
     }
 
