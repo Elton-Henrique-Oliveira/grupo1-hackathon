@@ -10,19 +10,21 @@ import java.util.UUID
  */
 data class PasswordChangeRequest(
 
-    val userUUID: UUID,
+    var userUUID: UUID,
+
+    var enterpriseUUID: UUID,
     /**
      * The current password of this user.
      */
-    val currentPassword: String,
+    var currentPassword: String,
 
     /**
      * The user authentication record
      */
-    val newPassword: String,
+    var newPassword: String,
 
     /**
      * The user authentication record
      */
-    val newPasswordConfirmation: String
+    var newPasswordConfirmation: String
 )

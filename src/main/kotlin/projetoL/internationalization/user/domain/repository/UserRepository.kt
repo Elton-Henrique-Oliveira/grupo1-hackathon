@@ -15,7 +15,7 @@ interface UserRepository {
 
     fun updatePassword(passwordChangeRequest: PasswordChangeRequest)
 
-    fun getByUUID(uuid: UUID) : User?
+    fun getByUUID(uuid: UUID, enterpriseUUID: UUID) : User?
 
     fun getByLoginRequest(loginRequest: LoginRequest) : User?
 
@@ -24,11 +24,13 @@ interface UserRepository {
         size: Int,
         orderBy: String,
         sortBy: String,
-        filters: List<BasicFilter>?
+        filters: List<BasicFilter>?,
+        enterpriseUUID: UUID
     ) : List<User>?
 
     fun getCountAllUser(
-        filters: List<BasicFilter>?
+        filters: List<BasicFilter>?,
+        enterpriseUUID: UUID
     ) : Int
 
     fun getTypeByUUID(uuid: UUID) : UserType?

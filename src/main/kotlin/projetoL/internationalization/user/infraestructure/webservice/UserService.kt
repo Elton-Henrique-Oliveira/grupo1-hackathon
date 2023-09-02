@@ -14,26 +14,28 @@ import java.util.UUID
 interface UserService {
 
     fun createAndUpdate(
-        @RequestBody user : User
-    ) : UserResponse?
+        user: User
+    ): UserResponse?
 
     fun getAllUser(
-        @RequestParam("page", required = false, defaultValue = "1") page: Int,
-        @RequestParam("size", required = false, defaultValue = "30") size: Int,
-        @RequestParam("orderBy", required = false, defaultValue = "") orderBy: String,
-        @RequestParam("sortBy", required = false, defaultValue = "asc") sortBy: String,
-        @RequestParam("filter", required = false) filter: List<BasicFilter>?
-    ) : UserListAllResponse?
+        page: Int,
+        size: Int,
+        orderBy: String,
+        sortBy: String,
+        filters: List<BasicFilter>?,
+        enterpriseUUID: UUID
+    ): UserListAllResponse?
 
     fun getUserByUUID(
-        @PathVariable("uuid") uuid: UUID
-    ) : User?
+        uuid: UUID,
+        enterpriseUUID: UUID
+    ): User?
 
     fun requestLogin(
-        @RequestBody loginRequest: LoginRequest
-    ) : UserResponse?
+        loginRequest: LoginRequest
+    ): UserResponse?
 
     fun passwordChangeRequest(
-        @RequestBody passwordChangeRequest: PasswordChangeRequest
-    ) : UserResponse?
+        passwordChangeRequest: PasswordChangeRequest
+    ): UserResponse?
 }

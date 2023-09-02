@@ -1,5 +1,7 @@
 package projetoL.internationalization.user.domain.entities
 
+import java.util.*
+
 data class LoginRequest(
     /**
      * The identifier of this user, can be one of the following:
@@ -12,5 +14,7 @@ data class LoginRequest(
     /**
      * The password of this user
      */
-    val password: String
+    val password: String,
+
+    val enterpriseUUID: UUID
 )

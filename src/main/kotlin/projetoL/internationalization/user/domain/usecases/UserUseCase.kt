@@ -18,9 +18,10 @@ interface UserUseCase {
         orderBy: String,
         sortBy: String,
         filters: List<BasicFilter>?,
+        enterpriseUUID: UUID
     ) : UserListAllResponse?
 
-    fun getUserByUUID(uuid: UUID) : User?
+    fun getUserByUUID(uuid: UUID, enterpriseUUID: UUID) : User?
 
     fun requestLogin(loginRequest: LoginRequest) : UserResponse?
 

@@ -4,6 +4,7 @@ import projetoL.core.shared.webservice.BasicFilter
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
+import projetoL.internationalization.category.infraestructure.repository.database.EnterpriseDataBase
 import java.util.*
 
 object UserDataBase : Table("user") {
@@ -13,7 +14,9 @@ object UserDataBase : Table("user") {
     val isActive = bool("is_active")
     val email = varchar("email", 200).nullable()
     val authenticationRecord = varchar("authentication_record", 200).uniqueIndex()
+    val enterpriseUUID = reference("enterprise_uuid", EnterpriseDataBase.uuid)
     val password = text("password")
+    val hash = text("salt")
     val lastPasswordModified = datetime("last_password_modified").nullable()
     val passwordValidate = datetime("password_validate").nullable()
     val updatePassword = bool("update_password").default(true)

@@ -2,6 +2,7 @@ package projetoL.internationalization.user.domain.entities
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import projetoL.internationalization.enterprise.domain.entities.Enterprise
 import java.time.LocalDateTime
 import java.util.*
 
@@ -31,6 +32,10 @@ data class User(
      * The e-mail of the user
      */
     var email: String? = null,
+
+    var hash: String? = null,
+
+    var enterprise: Enterprise? = null,
 
     /**
      * The credential of login to access the system

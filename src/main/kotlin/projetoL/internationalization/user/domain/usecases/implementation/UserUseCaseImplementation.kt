@@ -1,5 +1,6 @@
 package projetoL.internationalization.user.domain.usecases.implementation
 
+import org.mindrot.jbcrypt.BCrypt
 import org.springframework.stereotype.Service
 import projetoL.core.shared.utils.Utils
 import projetoL.core.shared.webservice.BasicFilter
@@ -53,7 +54,7 @@ class UserUseCaseImplementation(
             return UserResponse(userRepository.create(user))
         }
 
-        if (userRepository.getByUUID(user.uuid!!) == null) {
+        if (userRepository.getByUUID(user.uuid!!, user.enterprise!!.uuid!!) == null) {
             return UserResponse(error = USUARIO_NAO_EXISTE)
         }
 
@@ -65,13 +66,15 @@ class UserUseCaseImplementation(
         size: Int,
         orderBy: String,
         sortBy: String,
-        filters: List<BasicFilter>?
+        filters: List<BasicFilter>?,
+        enterpriseUUID: UUID
     ): UserListAllResponse? {
         return try {
-            val totalPages: TotalPages? = Utils.calculateTotalPages(userRepository.getCountAllUser(filters), size)
+            val totalPages: TotalPages? =
+                Utils.calculateTotalPages(userRepository.getCountAllUser(filters, enterpriseUUID), size)
 
             UserListAllResponse(
-                user = userRepository.getAllUser(page, size, orderBy, sortBy, filters),
+                user = userRepository.getAllUser(page, size, orderBy, sortBy, filters, enterpriseUUID),
                 page = page,
                 size = size,
                 numberPages = totalPages!!.totalPages,
@@ -82,8 +85,8 @@ class UserUseCaseImplementation(
         }
     }
 
-    override fun getUserByUUID(uuid: UUID): User? {
-        return userRepository.getByUUID(uuid)
+    override fun getUserByUUID(uuid: UUID, enterpriseUUID: UUID): User? {
+        return userRepository.getByUUID(uuid, enterpriseUUID)
     }
 
     override fun requestLogin(loginRequest: LoginRequest): UserResponse? {
@@ -104,35 +107,51 @@ class UserUseCaseImplementation(
 
     override fun passwordChangeRequest(passwordChangeRequest: PasswordChangeRequest): UserResponse? {
         println(passwordChangeRequest.currentPassword)
-        val user: User = userRepository.getByUUID(passwordChangeRequest.userUUID)
+        val user: User = userRepository.getByUUID(passwordChangeRequest.userUUID, passwordChangeRequest.enterpriseUUID)
             ?: return UserResponse(error = USUARIO_NAO_EXISTE)
 
-        if(user.password != passwordChangeRequest.currentPassword){
+        val hashedPasswordOld = BCrypt.hashpw(passwordChangeRequest.currentPassword, user.hash)
+        val hashedPasswordNew = BCrypt.hashpw(passwordChangeRequest.newPassword, user.hash)
+        val hashedPasswordNewConfirmation = BCrypt.hashpw(passwordChangeRequest.newPasswordConfirmation, user.hash)
+
+        println(passwordChangeRequest.currentPassword)
+
+        passwordChangeRequest.currentPassword = hashedPasswordOld.toString()
+        passwordChangeRequest.newPassword = hashedPasswordNew.toString()
+        passwordChangeRequest.newPasswordConfirmation = hashedPasswordNewConfirmation.toString()
+
+        println(passwordChangeRequest.currentPassword)
+        if (user.password != passwordChangeRequest.currentPassword) {
             return UserResponse(error = SENHA_ANTIGA_NAO_CONFERE)
         }
 
-        if(passwordChangeRequest.currentPassword == ""){
+        if (passwordChangeRequest.currentPassword == "") {
             return UserResponse(error = SENHA_ANTIGA_NAO_INFORMADA)
         }
 
-        if(passwordChangeRequest.newPassword == ""){
+        if (passwordChangeRequest.newPassword == "") {
             return UserResponse(error = SENHA_NOVA_NAO_INFORMADA)
         }
 
-        if(passwordChangeRequest.newPasswordConfirmation == ""){
+        if (passwordChangeRequest.newPasswordConfirmation == "") {
             return UserResponse(error = SENHA_DE_CONFIRMACAO_NAO_INFORMADA)
         }
 
-        if(passwordChangeRequest.newPassword != passwordChangeRequest.newPasswordConfirmation){
+        if (passwordChangeRequest.newPassword != passwordChangeRequest.newPasswordConfirmation) {
             return UserResponse(error = SENHAS_NAO_CONFERE)
         }
 
-        if(passwordChangeRequest.currentPassword == passwordChangeRequest.newPassword){
+        if (passwordChangeRequest.currentPassword == passwordChangeRequest.newPassword) {
             return UserResponse(error = SENHA_ANTIGA_IGUAL_ATUAL)
         }
 
         userRepository.updatePassword(passwordChangeRequest)
 
-        return UserResponse(user = userRepository.getByUUID(passwordChangeRequest.userUUID))
+        return UserResponse(
+            user = userRepository.getByUUID(
+                passwordChangeRequest.userUUID,
+                passwordChangeRequest.enterpriseUUID
+            )
+        )
     }
 }
